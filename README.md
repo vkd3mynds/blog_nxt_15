@@ -34,3 +34,52 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+
+
+
+
+#### git command
+
+git init
+git add README.md
+git commit -m "first commit"
+git branch -M main
+git remote add origin https://github.com/vkd3mynds/blog_nxt_15.git
+git push -u origin main
+
+
+prisma
+npm i prisma --save-dev
+
+npm install @prisma/client
+
+npx prisma init --datasource-provider postgresql
+
+npx prisma migrate dev --name model added
+
+
+
+
+// {
+//   "$schema": "https://ui.shadcn.com/schema.json",
+//   "style": "new-york",
+//   "rsc": true,
+//   "tsx": true,
+//   "tailwind": {
+//     "config": "",
+//     "css": "app/globals.css",
+//     "baseColor": "zinc",
+//     "cssVariables": true,
+//     "prefix": ""
+//   },
+//   "aliases": {
+//     "components": "@/components",
+//     "utils": "@/lib/utils",
+//     "ui": "@/components/ui",
+//     "lib": "@/lib",
+//     "hooks": "@/hooks"
+//   },
+//   "iconLibrary": "lucide"
+// }
+"componentPath": "./src/components"
