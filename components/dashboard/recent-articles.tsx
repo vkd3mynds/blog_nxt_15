@@ -1,13 +1,30 @@
-import React from 'react'
+'use client'
+import React, { startTransition, useTransition } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
 import { Button } from '../ui/button'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../ui/table'
 import Link from 'next/link'
-import { Delete } from 'lucide-react'
+import { Delete, Loader2, Loader2Icon } from 'lucide-react'
+import { Prisma } from '@prisma/client'
+import { useFormStatus } from 'react-dom'
+import { deleteArticle } from '@/actions/delete-article'
 
-type Props = {}
+type RecentArticlesProps = {
+  articles: Prisma.ArticlesGetPayload<{
+    include: {
+      comments: true;
+      author: {
+        select: {
+          name: true;
+          email: true;
+          imageUrl: true;
+        };
+      };
+    };
+  }>[];
+}
 
-function RecentArticles({articles}: Props) {
+const RecentArticles:React.FC<RecentArticlesProps> = ({articles})=> {
   return (
     <Card className="mb-8">
          <CardHeader>
@@ -34,22 +51,22 @@ function RecentArticles({articles}: Props) {
                 </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {articles.slice(0,5).map((article,ind)=>(
-                        <TableRow key={ind}>
-                            <TableCell className="font-medium">OOPS in JAVA, Basic to move Ahead</TableCell>
+                    {articles.slice(0,5).map((article)=>(
+                        <TableRow key={article.id}>
+                            <TableCell className="font-medium">{article.title}</TableCell>
                             <TableCell>
                     <span className="px-2 py-1 rounded-full text-xs bg-green-100 text-green-800">
                       Published
                     </span> 
                   </TableCell>
-                  <TableCell>125</TableCell>
-                  <TableCell>{new Date().toDateString()}</TableCell>
+                  <TableCell>{article.comments.length}</TableCell>
+                  <TableCell>{new Date(article.createdAt).toDateString()}</TableCell>
                   <TableCell>
                     <div className="flex gap-2">
-                      <Link href={`/dashboard/articles/id/edit`}>
+                      <Link href={`/dashboard/articles/${article.id}/edit`}>
                         <Button variant="ghost" size="sm">Edit</Button>
                       </Link>
-                      <DeleteButton/>
+                      <DeleteButton articleId={article.id}/>
                     </div>
                   </TableCell>
                         </TableRow>
@@ -65,10 +82,22 @@ function RecentArticles({articles}: Props) {
 
 export default RecentArticles
 
-const DeleteButton =()=>{
+
+type DeleteButtonProps = {
+  articleId: string;
+};
+const DeleteButton: React.FC<DeleteButtonProps> =({articleId})=>{
+  const [isPending,startTransition] = useTransition()
+  // const {pending} = useFormStatus()
     return(
-        <form action="">
-            <Button variant="ghost" size="sm" type='submit'><Delete/> Delete</Button>
+        <form action={()=>{
+          startTransition(async()=>{
+            await deleteArticle(articleId)
+          })
+        }}>
+            <Button disabled={isPending} variant={"ghost"} size={"sm"} type='submit'>
+              {isPending ? "Deleating..." : "Delete"}
+            </Button>
         </form>
     )
 }

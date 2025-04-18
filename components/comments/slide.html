@@ -1,0 +1,151 @@
+<style>
+    
+.product-slider-wrapper {
+  overflow: hidden;
+  width: 100%;
+  position: relative;
+}
+
+.product-slider {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding-bottom: 10px;
+
+  /* Hide scrollbar */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE & Edge */
+}
+
+.product-slider::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+.slider-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  background: #fff;
+  border: none;
+  font-size: 2rem;
+  padding: 0 10px;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.left-arrow {
+  left: 0;
+}
+
+.right-arrow {
+  right: 0;
+}
+
+.pro-part {
+  max-width: 310px;
+}
+
+/* Responsive card sizing */
+
+.product-slider .col-sm-6 {
+  flex: 0 0 25%; /* default: 4 cards per row on large */
+  max-width: 25%;
+}
+
+@media (max-width: 768px) {
+  .product-slider .col-sm-6 {
+    flex: 0 0 50%;
+    max-width: 50%;
+  }
+  .pro-part {
+    max-width: unset;
+}
+}
+
+@media (max-width: 500px) {
+  .product-slider {
+    flex-wrap: nowrap; /* keep in row */
+    overflow-x: auto;
+  }
+
+  .product-slider .col-sm-6 {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+
+  .slider-arrow {
+    display: block; /* show arrows on mobile */
+  }
+}
+
+</style>
+
+
+<div class="container my-container py-5 productp">
+    <div class="product-slider-wrapper position-relative" style="overflow: hidden;">
+        <button class="slider-arrow left-arrow" onclick="scrollSlider(-1)">&#10094;</button>
+        <div class="product-slider d-flex" id="productSlider" style="width: 100%; overflow-x: auto; scroll-behavior: smooth;">
+        <asp:Repeater ID="RptProduct" runat="server">
+            <ItemTemplate>
+                <div class="col-sm-6 col-lg-3  mb-3">
+                    <div class="pro-part">
+                        <div class="pro-img">
+                            <asp:Image class="img-fluid" ID="Image1" runat="server" ImageUrl='<%# "https://www.osseducation.com/admin/images/" + Eval("product_Image") %>' alt='<%# Eval("product_Image") %>' />
+                        </div>
+                        <div class="details">
+                            <h3><%# Eval("product_Name") %></h3>
+                            <ul class="price-part">
+                                <li><span class="f-600">Actual Price</span> <span class="l-through">₹<%# Eval("product_ActualPrice") %></span></li>
+                                <li><span class="f-600">Our Price</span><span>₹<%# Eval("product_OurPrice") %></span></li>
+                            </ul>
+                            <div class="bt-2">
+                                <%
+                                    if (Session["UserName"] == null)
+                                    {
+                                %>
+                                <span class="btn-2" onclick="showpopup()">Book Now</span>
+                                <%
+                                    }
+                                    else
+                                    {
+                                %>
+                                <a href="Vouchers" class="btn-2">Book Now</a>
+                                <%
+                                    }
+                                %>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </ItemTemplate>
+        </asp:Repeater>
+        </div>
+        <button class="slider-arrow right-arrow" onclick="scrollSlider(1)">&#10095;</button>
+    </div>
+</div>
+
+
+<script>
+    //         function scrollSlider(direction) {
+//     const slider = document.getElementById("productSlider");
+//     const cardWidth = slider.querySelector('.pro-part').offsetWidth;
+//     slider.scrollBy({
+//       left: direction * (cardWidth + 16), // 16 is for margin/gap between cards
+//       behavior: 'smooth'
+//     });
+//   }
+
+
+  function scrollSlider(direction) {
+  const slider = document.getElementById("productSlider");
+  const card = slider.querySelector(".col-sm-6");
+  const scrollAmount = card.offsetWidth;
+
+  slider.scrollBy({
+    left: direction * scrollAmount,
+    behavior: "smooth"
+  });
+}
+</script>

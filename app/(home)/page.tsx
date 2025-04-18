@@ -1,5 +1,6 @@
 // import { BlogFooter } from '@/components/home/BlogFooter'
 // import Navbar from '@/components/home/header/Navbar'
+import TopArticlesFallback from '@/components/articles/TopArticleFallback'
 import HeroSection from '@/components/home/hero-section'
 import { TopArticles } from '@/components/home/top-articles'
 import { Button } from '@/components/ui/button'
@@ -22,7 +23,7 @@ const Home = () => {
             </p>
           </div>
           {/* Top Articles */}
-          <Suspense fallback={<h1>Loading....</h1>}>
+          <Suspense fallback={<TopArticlesFallback count={3} />}>
           <TopArticles/> 
           </Suspense>
           <div className="mt-12 text-center">
